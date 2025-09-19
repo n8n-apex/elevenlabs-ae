@@ -11,22 +11,23 @@ const EmbedPage = () => {
   useEffect(() => {
     console.log('EmbedPage: Checking for agent ID...');
     
-    // Check environment variable first (for Railway deployment)
-    const envAgentId = import.meta.env.VITE_ELEVENLABS_AGENT_ID;
-    console.log('Environment agent ID:', envAgentId);
-    if (envAgentId) {
-      setAgentId(envAgentId);
-      setIsConfigured(true);
-      return;
-    }
-
-    // Check URL params second
+    // Check URL params first (highest priority)
     const urlParams = new URLSearchParams(window.location.search);
     const urlAgentId = urlParams.get('agentId');
     console.log('URL agent ID:', urlAgentId);
     
     if (urlAgentId) {
       setAgentId(urlAgentId);
+      setIsConfigured(true);
+      return;
+    }
+
+    // Check environment variable second (for Railway deployment)
+    const envAgentId = import.meta.env.VITE_ELEVENLABS_AGENT_ID;
+    console.log('Environment agent ID:', envAgentId);
+    
+    if (envAgentId) {
+      setAgentId(envAgentId);
       setIsConfigured(true);
       return;
     }
